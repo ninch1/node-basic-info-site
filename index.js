@@ -1,19 +1,48 @@
 const { createServer } = require('http');
+const fs = require('fs');
 const PORT = 8080;
 
 const server = createServer((req, res) => {
     if (req.url === "/") {
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.end('<h1>index</h1>')
+        fs.readFile("./view/index.html", "utf8", (err, data) => {
+            if (err) {
+                res.writeHead(500, {"Content-Type": "text/html"});
+                res.end("<h1>Server Error</h1>")
+            } else {
+                res.writeHead(200, {'Content-Type': 'text/html'});
+                res.end(data)
+            }
+        })
     } else if (req.url === "/about") {
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.end('<h1>about</h1>');
+        fs.readFile("./view/about.html", "utf8", (err, data) => {
+            if (err) {
+                res.writeHead(500, {"Content-Type": "text/html"});
+                res.end("<h1>Server Error</h1>")
+            } else {
+                res.writeHead(200, {'Content-Type': 'text/html'});
+                res.end(data);
+            }
+        })
     } else if (req.url === "/contact-me") {
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.end('<h1>contacts</h1>');
+        fs.readFile("./view/contact-me.html", "utf8", (err, data) => {
+            if (err) {
+                res.writeHead(500, {"Content-Type": "text/html"});
+                res.end("<h1>Server Error</h1>")
+            } else {
+                res.writeHead(200, {'Content-Type': 'text/html'});
+                res.end(data);
+            }
+        })
     } else {
-        res.writeHead(404, {'Content-Type': 'text/html'});
-        res.end('<h1>page does not exist</h1>')
+        fs.readFile("./view/404.html", "utf8", (err, data) => {
+            if (err) {
+                res.writeHead(500, {"Content-Type": "text/html"});
+                res.end("<h1>Server Error</h1>")
+            } else {
+                res.writeHead(404, {'Content-Type': 'text/html'});
+                res.end(data)
+            }
+        })
     }
 })
 
