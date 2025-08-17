@@ -1,49 +1,31 @@
 const { createServer } = require('http');
 const fs = require('fs');
+const path = require('path');
 const PORT = 8080;
 
+function showFile(res, fileName, statusCode = 200) {
+    fs.readFile(path.join(__dirname, "view", `${fileName}.html`) , "utf8", (err, data) => {
+        if (err) {
+            res.writeHead(500, {"Content-Type": "text/html"})
+            res.end("<h1>Server Error</h1>");
+        } else {
+            res.writeHead(statusCode, {"Content-Type": "text/html"})
+            res.end(data)
+        }
+    });
+}
+
+const urlMap = {
+    "/": "index",
+    "/about": "about",
+    "/contact-me": "contact-me"
+}
+
 const server = createServer((req, res) => {
-    if (req.url === "/") {
-        fs.readFile("./view/index.html", "utf8", (err, data) => {
-            if (err) {
-                res.writeHead(500, {"Content-Type": "text/html"});
-                res.end("<h1>Server Error</h1>")
-            } else {
-                res.writeHead(200, {'Content-Type': 'text/html'});
-                res.end(data)
-            }
-        })
-    } else if (req.url === "/about") {
-        fs.readFile("./view/about.html", "utf8", (err, data) => {
-            if (err) {
-                res.writeHead(500, {"Content-Type": "text/html"});
-                res.end("<h1>Server Error</h1>")
-            } else {
-                res.writeHead(200, {'Content-Type': 'text/html'});
-                res.end(data);
-            }
-        })
-    } else if (req.url === "/contact-me") {
-        fs.readFile("./view/contact-me.html", "utf8", (err, data) => {
-            if (err) {
-                res.writeHead(500, {"Content-Type": "text/html"});
-                res.end("<h1>Server Error</h1>")
-            } else {
-                res.writeHead(200, {'Content-Type': 'text/html'});
-                res.end(data);
-            }
-        })
-    } else {
-        fs.readFile("./view/404.html", "utf8", (err, data) => {
-            if (err) {
-                res.writeHead(500, {"Content-Type": "text/html"});
-                res.end("<h1>Server Error</h1>")
-            } else {
-                res.writeHead(404, {'Content-Type': 'text/html'});
-                res.end(data)
-            }
-        })
-    }
+    const fileName = urlMap[req.url.split('?')[0]]
+    fileName ? showFile(res, fileName, 200) : showFile(res, "404", 404);
 })
 
-server.listen(PORT, console.log('Server running at ' + PORT))
+server.listen(PORT,  () => {
+    console.log('Server running at ' + PORT)
+})
