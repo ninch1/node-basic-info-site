@@ -1,31 +1,15 @@
-const { createServer } = require('http');
-const fs = require('fs');
-const path = require('path');
-const PORT = 8080;
+const express = require('express')
+const app = express()
+const PORT = 3000
+const path = require('path')
 
-function showFile(res, fileName, statusCode = 200) {
-    fs.readFile(path.join(__dirname, "view", `${fileName}.html`) , "utf8", (err, data) => {
-        if (err) {
-            res.writeHead(500, {"Content-Type": "text/html"})
-            res.end("<h1>Server Error</h1>");
-        } else {
-            res.writeHead(statusCode, {"Content-Type": "text/html"})
-            res.end(data)
-        }
-    });
-}
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'view', 'index.html')))
+app.get('/about', (req, res) => res.sendFile(path.join(__dirname, 'view', 'about.html')))
+app.get('/contact-me', (req, res) => res.sendFile(path.join(__dirname, 'view', 'contact-me.html')))
+//404
+app.use((req, res) => res.status(404).sendFile(path.join(__dirname, 'view', '404.html')))
 
-const urlMap = {
-    "/": "index",
-    "/about": "about",
-    "/contact-me": "contact-me"
-}
-
-const server = createServer((req, res) => {
-    const fileName = urlMap[req.url.split('?')[0]]
-    fileName ? showFile(res, fileName, 200) : showFile(res, "404", 404);
-})
-
-server.listen(PORT,  () => {
-    console.log('Server running at ' + PORT)
+app.listen(PORT, (error) => {
+    if (error) throw error;
+    console.log(`Server running on port ${3000}`)
 })

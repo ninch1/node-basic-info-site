@@ -1,12 +1,5 @@
-# Vanilla Node.js Site - Odin Project Assignment
+# Express Node.js Site - Odin Project Assignment
 
-A simple, framework-free Node.js site for The Odin Project.  
-Implements **basic routing** to serve static HTML pages.
+A simple, basic Express site.
 
-## Features
-- Plain Node.js (`http` + `fs`) - no frameworks
-- Routes for `/`, `/about`, `/contact-me`
-- Fallback **404** page for unknown paths
-
-## Requirements
-- just NodeJS
+First wrote in vanilla Node.js then rewrote in Express.
